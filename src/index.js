@@ -30,12 +30,12 @@ app.use(morgan("dev")); // Logger de peticiones HTTP
 const alumnoRouter = require("./routes/estudianteRoute");
 const personalRouter = require("./routes/personalRoute");
 const asistenciaAlumnosRouter = require("./routes/asistenciaAlumnosRoute");
-
+const localidadRoutes = require("./routes/localidadRoute")
 // Rutas
 app.use("/api/alumnos", alumnoRouter); // Rutas para estudiantes
 app.use("/api/personal", personalRouter); // Rutas para personal
 app.use("/api/asistenciaAlumnos", asistenciaAlumnosRouter); // Rutas para asistencia de estudiantes
-
+app.use("/api/localidades", localidadRoutes); // Rutas para localidades
 // Función de conexión a la base de datos
 const conexionDB = async () => {
     try {
