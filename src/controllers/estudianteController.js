@@ -73,8 +73,22 @@ const obtenerEstudiantes = async (req, res) => {
     res.status(500).json({ error: "Error al obtener los estudiantes" });
   }
 };
+const obtenerTodosEstudiantes = async (req, res) => {
+  try {
+    // Obtener todos los estudiantes activos
+    const estudiantes = await EstudianteModel.findAll({
+      where: { estado: "activo" }
+    });
 
+    // Devolver los estudiantes
+    res.status(200).json(estudiantes);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al obtener los estudiantes" });
+  }
+};
 
+// Actualizar un estudiante
 // Actualizar un estudiante
 const actualizarEstudiante = async (req, res) => {
   const { id_estudiante } = req.params;
@@ -85,7 +99,7 @@ const actualizarEstudiante = async (req, res) => {
     direccion_calle,
     calle_numero,
     telefono,
-    emailCREATE,
+    email,  // Corrección: usar 'email' en lugar de 'emailCREATE'
     grupo_sanguineo,
     fecha_nacimiento,
     cuil,
@@ -96,6 +110,13 @@ const actualizarEstudiante = async (req, res) => {
   } = req.body;
 
   try {
+    // Verificar si el estudiante existe
+    const estudiante = await EstudianteModel.findByPk(id_estudiante);
+    if (!estudiante) {
+      return res.status(404).json({ error: "Estudiante no encontrado" });
+    }
+
+    // Actualizar el estudiante
     const estudianteActualizado = await EstudianteModel.update(
       {
         nombre,
@@ -104,7 +125,7 @@ const actualizarEstudiante = async (req, res) => {
         direccion_calle,
         calle_numero,
         telefono,
-        emailCREATE,
+        email,  // Corrección aquí
         grupo_sanguineo,
         fecha_nacimiento,
         cuil,
@@ -117,15 +138,17 @@ const actualizarEstudiante = async (req, res) => {
     );
 
     if (estudianteActualizado[0] === 1) {
-      res.status(200).json({ message: "Estudiante actualizado correctamente" });
+      const estudianteRecienActualizado = await EstudianteModel.findByPk(id_estudiante); // Opcional
+      res.status(200).json(estudianteRecienActualizado);  // Devolver el estudiante actualizado
     } else {
-      res.status(404).json({ error: "Estudiante no encontrado" });
+      res.status(200).json({ message: "No se realizaron cambios en el estudiante" });
     }
   } catch (error) {
     console.error("Error al actualizar el estudiante:", error);
     res.status(500).json({ error: "Error al actualizar el estudiante" });
   }
 };
+
 
 // Eliminar un estudiante (borrado lógico)
 const eliminarEstudiante = async (req, res) => {
@@ -149,6 +172,7 @@ const eliminarEstudiante = async (req, res) => {
 };
 
 module.exports = {
+  obtenerTodosEstudiantes,
   crearEstudiante,
   obtenerEstudiantes,
   actualizarEstudiante,
