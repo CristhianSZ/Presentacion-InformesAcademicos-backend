@@ -17,4 +17,25 @@ const getLocalidades = async (req, res) => {
   }
 };
 
-module.exports = { getLocalidades };
+const getProvinciasYLocalidades = async (req, res) => {
+  try {
+    // Obtener todas las provincias
+    const provincias = await ProvinciaModel.findAll({
+      attributes: ['id_provincia', 'nombre'], // Solo traer el id y nombre de la provincia
+    });
+
+    // Obtener todas las localidades junto con sus provincias
+    const localidades = await LocalidadModel.findAll({
+      attributes: ['id_localidad', 'nombre', 'id_provincia'], // Solo traer los atributos necesarios
+    });
+
+    // Enviar provincias y localidades como dos conjuntos de datos separados
+    res.json({ provincias, localidades });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener provincias y localidades.' });
+  }
+};
+
+
+module.exports = { getLocalidades ,getProvinciasYLocalidades};

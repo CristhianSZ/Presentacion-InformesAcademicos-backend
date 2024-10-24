@@ -31,11 +31,15 @@ const alumnoRouter = require("./routes/estudianteRoute");
 const personalRouter = require("./routes/personalRoute");
 const asistenciaAlumnosRouter = require("./routes/asistenciaAlumnosRoute");
 const localidadRoutes = require("./routes/localidadRoute")
+const cursosRoutes = require("./routes/cursosRoutes")
+const nivelRoutes = require("./routes/nivelRoute")
 // Rutas
 app.use("/api/alumnos", alumnoRouter); // Rutas para estudiantes
 app.use("/api/personal", personalRouter); // Rutas para personal
 app.use("/api/asistenciaAlumnos", asistenciaAlumnosRouter); // Rutas para asistencia de estudiantes
 app.use("/api/localidades", localidadRoutes); // Rutas para localidades
+app.use("/api/cursos", cursosRoutes); // Rutas para cursos
+app.use("/api/nivel", nivelRoutes); // Rutas para nivel
 // Función de conexión a la base de datos
 const conexionDB = async () => {
     try {
